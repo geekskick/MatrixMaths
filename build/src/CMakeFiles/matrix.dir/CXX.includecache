@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/patrickmintram/Documents/Programming/C++/MatrixMaths/MatrixMaths/src/matrix.cpp
+matrix.hpp
+/Users/patrickmintram/Documents/Programming/C++/MatrixMaths/MatrixMaths/src/matrix.hpp
+
+/Users/patrickmintram/Documents/Programming/C++/MatrixMaths/MatrixMaths/src/matrix.hpp
+iostream
+-
+vector
+-
+exception
+-
+numeric
+-
+valarray
+-
+
