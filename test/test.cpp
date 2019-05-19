@@ -1,14 +1,13 @@
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 #include "matrix.hpp"
 
 TEST_CASE("Creating Matrices"){
 
-	matrix m;
+	matrix<double> m;
 	REQUIRE(m.rows() == 0);
 	REQUIRE(m.cols() == 0);
-
-	matrix p(7,9);
+	matrix<double> p(7,9);
 	REQUIRE(p.rows() == 7);
 	REQUIRE(p.cols() == 9);
 
@@ -23,7 +22,7 @@ TEST_CASE("Creating Matrices"){
 }
 
 TEST_CASE("Assigning Values"){
-	matrix m = matrix::identity(6);
+	auto m = matrix<double>::identity(6);
 
 	for(int i = 0; i < 6; i++){
 		for(int c = 0; c < 6; c++){
@@ -40,8 +39,8 @@ TEST_CASE("Assigning Values"){
 }
 
 TEST_CASE("Multiplication"){
-	matrix m = matrix::identity(6);
-	matrix r = m * 3;
+	auto m = matrix<double>::identity(6);
+	auto r = m * 3;
 
 	for(int i = 0; i < 6; i++){
 		for(int c = 0; c < 6; c++){
@@ -49,12 +48,12 @@ TEST_CASE("Multiplication"){
 		}
 	}
 
-	m = matrix(2,1);
-	r = matrix(1,2);
+	m = matrix<double>(2,1);
+	r = matrix<double>(1,2);
 	m[1][0] = 1;
 	r[0][0] = 2;
 	r[0][1] = 3;
-	matrix p = m * r;
+	auto p = m * r;
 	REQUIRE(p.cols() == 2);
 	REQUIRE(p.rows() == 2);
 	REQUIRE(p[0][0] == 0);
@@ -64,14 +63,14 @@ TEST_CASE("Multiplication"){
 
 	bool except = false;
 	try{
-		matrix::identity(7) * m;
+		matrix<double>::identity(7) * m;
 	}
 	catch(matrix_exception &e){
 		except = true;
 	}
 	REQUIRE(except);
 
-	m = matrix::identity(6);
+	m = matrix<double>::identity(6);
 	m *= 3;
 	for(int i = 0; i < 6; i++){
 		for(int c = 0; c < 6; c++){
@@ -79,8 +78,8 @@ TEST_CASE("Multiplication"){
 		}
 	}
 
-	m = matrix(2,1);
-	r = matrix(1,2);
+	m = matrix<double>(2,1);
+	r = matrix<double>(1,2);
 	m[1][0] = 1;
 	r[0][0] = 2;
 	r[0][1] = 3;
@@ -95,9 +94,9 @@ TEST_CASE("Multiplication"){
 }
 
 TEST_CASE("Addition"){
-	matrix m = matrix::identity(3);
-	matrix l = matrix::identity(3);
-	matrix r = m + l;
+	auto m = matrix<double>::identity(3);
+	auto l = matrix<double>::identity(3);
+	auto r = m + l;
 
 	REQUIRE(r.cols() == 3);
 	REQUIRE(r.rows() == 3);
@@ -128,9 +127,9 @@ TEST_CASE("Addition"){
 }
 
 TEST_CASE("Subtraction"){
-	matrix m = matrix::identity(3);
-	matrix l = matrix::identity(3);
-	matrix r = m - l;
+	auto m = matrix<double>::identity(3);
+	auto l = matrix<double>::identity(3);
+	auto r = m - l;
 
 	REQUIRE(r.cols() == 3);
 	REQUIRE(r.rows() == 3);
@@ -151,7 +150,7 @@ TEST_CASE("Subtraction"){
 	}
 	REQUIRE(except);
 
-	r = matrix(3, 3);
+	r = matrix<double>(3, 3);
 	r.fill(2);
 	m -= r;
 	for(int i = 0; i < 3; i++){
@@ -162,10 +161,10 @@ TEST_CASE("Subtraction"){
 }
 
 TEST_CASE("Transpose"){
-	matrix m(2,1);
+	matrix<double> m(2,1);
 	m[0][0] = 1;
 	m[1][0] = 0;
-	matrix t = m.transpose();
+	const auto t = m.transpose();
 	REQUIRE(t.rows() == 1);
 	REQUIRE(t.cols() == 2);
 	REQUIRE(t[0][1] == 0);
@@ -173,7 +172,7 @@ TEST_CASE("Transpose"){
 }
 
 TEST_CASE("Determinant"){
-	matrix m(2,2);
+	matrix<double> m(2,2);
 	m[0][0] = 1;
 	m[0][1] = 2;
 	m[1][0] = 1;
@@ -181,7 +180,7 @@ TEST_CASE("Determinant"){
 	// ab-dc
 	REQUIRE(m.determinant() == 3);
 
-	matrix r(4, 3);
+	matrix<double> r(4, 3);
 	r.fill(2);
 	bool except = false;
 	try{
@@ -197,7 +196,7 @@ TEST_CASE("Determinant"){
 	std::vector<double> c = { 2, 8, 7 };
 	std::vector<std::vector<double>> vec = {a, b, c};
 
-	matrix d(vec);
+	matrix<double> d(vec);
 	REQUIRE(d.determinant() == -306.0);
 }
 
@@ -205,8 +204,8 @@ TEST_CASE("Inverse"){
 	std::vector<std::vector<double>> vec = {
 		{ 3, 3.5 }, 
 		{ 3.2, 3.6 }};
-	matrix m(vec);
-	matrix im = m.inverse();
+	matrix<double> m(vec);
+	auto im = m.inverse();
 	REQUIRE(im[0][0] <= -8.9);
 	REQUIRE(im[0][0] >= -9.0);
 	REQUIRE(im[0][1] >= 8.65);
@@ -217,7 +216,7 @@ TEST_CASE("Inverse"){
 	REQUIRE(im[1][1] <= -7.4);
 
 	bool except = false;
-	m = matrix(2, 2);
+	m = matrix<double>(2, 2);
 	m[0][0] = 2;
 	m[1][1] = 2;
 	m[0][1] = 1;
@@ -233,17 +232,17 @@ TEST_CASE("Inverse"){
 }
 
 TEST_CASE("Equality"){
-	matrix m = matrix::identity(2);
-	REQUIRE(m == matrix::identity(2));
+	auto m = matrix<double>::identity(2);
+	REQUIRE(m == matrix<double>::identity(2));
 	m[0][0] = 7;
-	REQUIRE(m != matrix::identity(2));
+	REQUIRE(m != matrix<double>::identity(2));
 	std::vector<double> v = { 5 , 6 };
 	m.add_row(v);
-	REQUIRE(m != matrix::identity(2));
+	REQUIRE(m != matrix<double>::identity(2));
 }
 
 TEST_CASE("Add Row"){
-	matrix m = matrix::identity(2);
+	auto m = matrix<double>::identity(2);
 	bool except = false;
 	std::vector<double> v = { 1, 2 };
 	try{

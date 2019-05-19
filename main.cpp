@@ -8,7 +8,7 @@
 
 int main(int argc, const char * argv[]) {
 	
-	matrix m = matrix::identity(2);
+	auto m = matrix<double>::identity(2);
 
 	// Add a row to the matrix
 	std::vector<double> coeffs = { 0.5, 4 };
@@ -29,10 +29,10 @@ int main(int argc, const char * argv[]) {
 
 	std::cout << m << "Determinant is " << det << std::endl;
 
-	m = matrix::identity(2);
+	m = matrix<double>::identity(2);
 	
 	try{
-		m *= matrix::identity(4);
+		m *= matrix<double>::identity(4);
 	}
 	catch (matrix_exception &e){
 		std::cerr << e.what() << std::endl;
