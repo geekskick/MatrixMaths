@@ -67,14 +67,14 @@ There are no dependancies.
 > cmake .. 
 ```
 
-## Linking
+## Including
 
-The matrix library is built into the `build/src` directory, along with it's interface in `matrix.hpp`. This is linked using cmake's `target_include_directories(matrix PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})` command, so when you build your application using the command `target_link_libraries(MyApp LINK_PUBLIC matrix)` and the header file will be added to your application's include path.
+The matrix library is in the `build/src` directory, in it's interface `matrix.hpp`.
 
 ## Test
 
 Run tests from the build directory using 
 ```
-./test/matrix_test
+make test
 ```
-The tests are run using the `catch` tool's header: `catch.hpp`.
+The tests are run using the `catch2` tool's header: `catch.hpp`.
