@@ -2,6 +2,18 @@
 #include <catch2/catch.hpp>
 #include "matrix.hpp"
 
+TEST_CASE("Different types"){
+    using dm = matrix<double>;
+    const auto dminst = dm();
+    using im = matrix<int>;
+    const auto iminst = im();
+    using uim = matrix<unsigned int>;
+    const auto uiminst = uim();
+    using fm = matrix<float>;
+    const auto fminst = fm();
+    using bm = matrix<bool>;
+    const auto bminst = bm();
+}
 TEST_CASE("Creating Matrices"){
 
 	matrix<double> m;
