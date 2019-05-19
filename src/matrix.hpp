@@ -33,7 +33,7 @@ public:
     ~matrix() {}
 
     static matrix identity(const std::size_t dimension) {
-        matrix result(dimension, dimension);
+        auto result = matrix(dimension, dimension);
         for (int i = 0; i < dimension; i++) {
             result[i][i] = 1;
         }
@@ -84,7 +84,7 @@ public:
     std::size_t cols() const { return m_cdimension; }
 
     std::vector<T> column(const std::size_t c) const {
-        std::vector<T> col;
+        auto col = std::vector<T>{};
         for (int r = 0; r < rows(); r++) {
             col.push_back(m_values[r][c]);
         }
@@ -92,7 +92,7 @@ public:
     }
 
     matrix transpose() const {
-        matrix result(m_cdimension, m_rdimension);
+        auto result = matrix(m_cdimension, m_rdimension);
         for (int r = 0; r < m_rdimension; r++) {
             for (int c = 0; c < m_cdimension; c++) {
                 result[c][r] = m_values[r][c];
@@ -102,7 +102,7 @@ public:
     }
 
     matrix inverse() const {
-        const double det = determinant();
+        const auto det = determinant();
         if (det == 0.0) {
             throw matrix_exception("Unable to invert as the determinant is 0");
         }
@@ -120,7 +120,7 @@ public:
     }
 
     matrix cofactors() const {
-        matrix result = *this;
+        auto result = *this;
         for (int r = 1; r <= m_rdimension; r++) {
             for (int c = r % 2; c < m_cdimension; c += 2) {
                 result.m_values[r - 1][c] *= -1;
@@ -130,7 +130,7 @@ public:
     }
 
     matrix minors() const {
-        matrix result(m_cdimension, m_rdimension);
+        auto result = matrix(m_cdimension, m_rdimension);
         for (int c = 0; c < m_cdimension; c++) {
             for (int r = 0; r < m_rdimension; r++) {
                 matrix temp(m_cdimension - 1, m_rdimension - 1);
@@ -175,7 +175,7 @@ public:
     }
 
     matrix operator*=(const matrix &rhs) {
-        matrix result = *this * rhs;
+        auto result = *this * rhs;
         *this = result;
         return *this;
     }
@@ -211,7 +211,7 @@ public:
             throw matrix_exception("Dimensions don't match for - operator");
         }
 
-        matrix result(rhs.m_cdimension, rhs.m_rdimension);
+        auto result = matrix(rhs.m_cdimension, rhs.m_rdimension);
         for (int r = 0; r < m_rdimension; r++) {
             for (int c = 0; c < m_cdimension; c++) {
                 result.m_values[r][c] = m_values[r][c] - rhs.m_values[r][c];
@@ -221,7 +221,7 @@ public:
     }
 
     matrix operator*(const double &scalar) const {
-        matrix result = *this;
+        auto result = *this;
         for (int r = 0; r < m_rdimension; r++) {
             for (int c = 0; c < m_cdimension; c++) {
                 result.m_values[r][c] *= scalar;
@@ -235,7 +235,7 @@ public:
             throw matrix_exception("Dimensions don't match for + operator");
         }
 
-        matrix result(rhs.m_cdimension, rhs.m_rdimension);
+        auto result = matrix(rhs.m_cdimension, rhs.m_rdimension);
         for (int r = 0; r < m_rdimension; r++) {
             for (int c = 0; c < m_cdimension; c++) {
                 result.m_values[r][c] = m_values[r][c] + rhs.m_values[r][c];
@@ -245,7 +245,7 @@ public:
     }
 
     matrix operator/(const double &scalar) const {
-        matrix result = *this;
+        auto result = *this;
         for (int r = 0; r < m_rdimension; r++) {
             for (int c = 0; c < m_cdimension; c++) {
                 result.m_values[r][c] /= scalar;
@@ -259,14 +259,14 @@ public:
             throw matrix_exception("Dimensions not compatible for * operator [" + std::to_string(m_cdimension) + " vs. " + std::to_string(rhs.m_cdimension) +
                                    "]");
         }
-        matrix result(rhs.cols(), rows());
+        auto result = matrix(rhs.cols(), rows());
         for (int r = 0; r < result.rows(); r++) {
-            const std::valarray<T> first_matrix_row(m_values[r].data(), m_values[r].size());
+            const auto first_matrix_row = std::valarray<T>(m_values[r].data(), m_values[r].size());
 
             for (int c = 0; c < result.cols(); c++) {
                 const auto column = rhs.column(c);
-                const std::valarray<T> second_matrix_column(column.data(), column.size());
-                const std::valarray<T> mulitplier = first_matrix_row * second_matrix_column;
+                const auto second_matrix_column = std::valarray<T>(column.data(), column.size());
+                const auto mulitplier = first_matrix_row * second_matrix_column;
                 result[r][c] = mulitplier.sum();
             }
         }
@@ -313,13 +313,13 @@ protected:
         if (sub_matrix.rows() == 2) {
             return (sub_matrix[0][0] * sub_matrix[1][1]) - (sub_matrix[1][0] * sub_matrix[0][1]);
         }
-        double sum = 0;
+        auto sum = 0.0;
         for (int s = 0; s < sub_matrix.m_cdimension; s++) {
-            matrix temp(sub_matrix.m_cdimension - 1, sub_matrix.m_rdimension - 1);
+            auto temp = matrix(sub_matrix.m_cdimension - 1, sub_matrix.m_rdimension - 1);
             for (int r = 0; r < sub_matrix.m_rdimension - 1; r++) {
                 for (int c = 0; c < sub_matrix.m_cdimension - 1; c++) {
-                    int upper_c = (c >= s) ? (c + 1) : c;
-                    int upper_r = r + 1;
+                    auto upper_c = (c >= s) ? (c + 1) : c;
+                    auto upper_r = r + 1;
                     temp[r][c] = sub_matrix[upper_r][upper_c];
                 }
             }
